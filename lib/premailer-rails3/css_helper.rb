@@ -33,10 +33,11 @@ module PremailerRails
             file = if path == :default
                      'email.css'
                    else
-                     path.sub("#{Rails.configuration.assets.prefix}/", '').sub(/(.*)-.*\.css$/, '\1.css')
+                     path.sub("#{Rails.configuration.assets.prefix}/", '') \
+                         .sub(/-.*\.css$/, '.css')
                    end
             if asset = Rails.application.assets.find_asset(file)
-              asset.respond_to?(:source) ? asset.source : asset.to_s
+              asset.to_s
             else
               raise "Couldn't find asset #{file} for premailer-rails3."
             end
@@ -54,8 +55,7 @@ module PremailerRails
     end
 
     def assets_enabled?
-      return false unless Rails.configuration.respond_to?(:assets)
-      Rails.configuration.assets.enabled
+      Rails.configuration.assets.enabled rescue false
     end
   end
 end
